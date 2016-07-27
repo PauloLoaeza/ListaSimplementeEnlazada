@@ -196,5 +196,24 @@ public class ListaSimpleTest {
 		} catch (IndiceInvalidoException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		/*
+		 * Test 16.- Eliminar el elemento de la posicion 4
+		 */
+		
+		System.out.println("\n\nTest 16.- posicion 4 eliminada");
+		try {
+			lista1.eliminar(4);
+		} catch (IndiceInvalidoException | ListaVaciaException e) {
+			System.out.println(e.getMessage());
+		}
+		lista1.show();
+		
+		/*
+		 * Test 17.- Limpiar la lista
+		 */
+		System.out.println("\n\nTest 17.- Lista limpiada:");
+		lista1.limpiar();
+		lista1.show();
 	}
 } 

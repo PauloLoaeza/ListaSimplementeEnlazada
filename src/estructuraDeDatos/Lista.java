@@ -239,6 +239,10 @@ implements Iterable<E> {
 	public void eliminarToken(E token) 
 			throws TokenNoEncontradoException, ListaVaciaException {
 
+		if (token == null) {
+			throw new TokenNoEncontradoException("Token nulo");
+		}
+		
 		if (estaVacia()) {
 			throw new ListaVaciaException("La lista está vacía");
 		}
@@ -321,7 +325,7 @@ implements Iterable<E> {
 	 * true si se evaluara que la lista esta ordenada de menor a mayor, false
 	 * si se evaluara de mayor a menor.
 	 * @return true si la lista esta ordenada, false si no lo esta.
-	 * @throws ListaVaciaException 
+	 * @throws ListaVaciaException se lanza cuando la lista esta vacia.
 	 */
 	public boolean estaOrdenada(boolean menor) throws ListaVaciaException {
 		if (menor) {
@@ -410,6 +414,7 @@ implements Iterable<E> {
 	 * @param indice indice del elemento en la lista.
 	 * @return retorna el elemento de la lista que se encuentra en la lista, si el
 	 * indice es mayor al tamaño de la lista retorna null.
+	 * @throws IndiceInvalidoException se lanza cuando el indice es negativo.
 	 */
 	public E get(int indice) throws IndiceInvalidoException {
 		if (indice < 0) {
@@ -430,7 +435,48 @@ implements Iterable<E> {
 
 		return aux.getValor();
 	}
-
+	
+	/**
+	 * Elimina un elemento en la lista con base en la posicion del elemento
+	 * @param indice posicion del elemento a eliminar.
+	 * @throws IndiceInvalidoException se lanza cuando el indice es negativo o
+	 * 		cuando sobrepasa el tamano de la lista.
+	 * @throws ListaVaciaException se lanza cuando la lista esta vacia.
+	 */
+	public void eliminar(int indice)
+			throws IndiceInvalidoException, ListaVaciaException {
+		if (indice < 0 || indice > size()) {
+			throw new IndiceInvalidoException("Indice negativo o mayor"
+					+ "que el tamaño de la lista");
+		}
+		
+		if (estaVacia()) {
+			throw new ListaVaciaException("Lista vacia");
+		}
+		
+		int pasos = 0;
+		
+		Nodo<E> aux = this.inicio;
+		while (aux != null && pasos != indice) {
+			pasos++;
+			aux = aux.getSiguiente();
+		}
+		
+		try {
+			eliminarToken(aux.getValor());
+		} catch (TokenNoEncontradoException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Deja la lista sin elementos.
+	 */
+	public void limpiar() {
+		this.inicio.setSiguiente(null);
+		this.inicio = null;
+	}
+	
 	/**
 	 * Intercambia los valores que se encuentran en los nodos a y b.
 	 * El valor de a pasa a ser el valor de b, y viceversa.

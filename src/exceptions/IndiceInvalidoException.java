@@ -19,6 +19,7 @@ public class IndiceInvalidoException extends Exception {
 
 	/**
 	 * Construye un IndiceInvalidoException con su respectivo mensaje.
+	 * @param mensaje mensaje de la excepcion.
 	 */
 	public IndiceInvalidoException(String mensaje) {
 		super(mensaje);
