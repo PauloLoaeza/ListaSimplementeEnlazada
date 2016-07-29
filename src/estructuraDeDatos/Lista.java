@@ -42,15 +42,29 @@ implements Iterable<E> {
 	 * @param elemento representa el objeto que se va a almacenar en la lista.
 	 */
 	public void agregarAlFinal(E elemento) {
+		/*
+		 * Creacion de un nuevo nodo. El elemento sera su valor
+		 */
 		Nodo<E> nuevo = new Nodo<E>(elemento);
+		
+		/*
+		 * Si la lista esta vacia el nuevo nodo sera el primer
+		 * elemento de la lista, o mejor dicho el inicio
+		 */
+		
 		if (estaVacia()) {
 			this.inicio = nuevo;
 		}
 		else {
+			//Nodo auxiliar para recorrer la lista
 			Nodo<E> aux = this.inicio;
+			
+			//Colocamos el auxiliar al final de la lista
 			while (aux.getSiguiente() != null) {
 				aux = aux.getSiguiente();
 			}
+			
+			//Se asigna el siguiente de auxiliar como el nuevo nodo
 			aux.setSiguiente(nuevo);
 		}
 	}
@@ -60,12 +74,20 @@ implements Iterable<E> {
 	 * @param elemento representa el objeto que se va a almacenar en la lista.
 	 */
 	public void agregarAlInicio(E elemento) {
+		/*
+		 * Creacion de un nuevo nodo. El elemento sera su valor
+		 */
 		Nodo<E> nuevo = new Nodo<E>(elemento);
 
+		/*
+		 * Si la lista tiene al menos un elemento se le asignara
+		 * el siguiente de nuevo como el inicio.
+		 */
 		if (!estaVacia()) {
 			nuevo.setSiguiente(this.inicio);
 		}
 
+		// El nodo nuevo pasa a ser el nodo de inicio de la lista
 		this.inicio = nuevo;
 	}
 
@@ -76,25 +98,42 @@ implements Iterable<E> {
 	 * @param elemento elemento de inserccion.
 	 */
 	public void insertarDeMenorAMayor(E elemento) {
+		/*
+		 * Creacion de un nuevo nodo. El elemento sera su valor
+		 */
 		Nodo<E> nuevo = new Nodo<E>(elemento);
 
+		//Si la lista esta vacia, el nodo de incio sera el nodo nuevo
 		if (estaVacia()) {
 			this.inicio = nuevo;
 		}
 		else {
+			//Nodo auxiliar para recorrer la lista
 			Nodo<E> aux = this.inicio;
+			//Nodo anterior para estar siempre anterior al nodo auxiliar
 			Nodo<E> ant = null;
 
+			/*
+			 * El nodo auxiliar ira recorriendo la lista siempre y cuando sea
+			 * diferente de null y el valor del nodo nuevo sea mayor al valor
+			 * del nodo auxliliar
+			 */
 			while (aux != null && nuevo.compareTo(aux) > 0) {
 				ant = aux;
 				aux = aux.getSiguiente();
 			}
 
+			// si en nodo auxiliar es igual al nodo inicial
 			if (ant == null) {
+				//se agrega el nodo al inicio de la lista
 				nuevo.setSiguiente(this.inicio);
 				this.inicio = nuevo;
 			}
 			else {
+				/*
+				 * El nodo nuevo debe estar entre el nodo anterior
+				 * y el nodo auxiliar
+				 */
 				ant.setSiguiente(nuevo);
 				nuevo.setSiguiente(aux);
 			}
@@ -107,25 +146,42 @@ implements Iterable<E> {
 	 * @param elemento elemento de inserccion.
 	 */
 	public void insertarDeMayorAMenor(E elemento) {
+		/*
+		 * Creacion de un nuevo nodo. El elemento sera su valor
+		 */
 		Nodo<E> nuevo = new Nodo<E>(elemento);
 
+		//si la lista esta vacia, nuevo sera el nuevo inicial
 		if (estaVacia()) {
 			this.inicio = nuevo;
 		}
 		else {
+			//Nodo auxiliar para recorrer la lista
 			Nodo<E> aux = this.inicio;
+			//Nodo anterior que siempre estara antes del auxiliar
 			Nodo<E> ant = null;
-
+			
+			/*
+			 * El nodo auxiliar recorrera la lista siempre y cuando 
+			 * sea diferente de null y el valor del nodo nuevo sea
+			 * menor al valor del nodo auxiliar
+			 */
 			while (aux != null && nuevo.compareTo(aux) < 0) {
 				ant = aux;
 				aux = aux.getSiguiente();
 			}
 
+			//si auxiliar es igual al nodo inicial
 			if (ant == null) {
+				//se inserta el nuevo nodo al inicio
 				nuevo.setSiguiente(this.inicio);
 				this.inicio = nuevo;
 			}
 			else {
+				/*
+				 * El nodo nuevo debera estar entre el nodo 
+				 * anterior y el nodo auxiliar
+				 */
 				ant.setSiguiente(nuevo);
 				nuevo.setSiguiente(aux);
 			}
@@ -149,27 +205,41 @@ implements Iterable<E> {
 	public void insertarAntesQueToken(E elemento, E token) 
 			throws TokenNoEncontradoException, ListaVaciaException {
 
+		//Si la lista esta vacia lanza la excepcion
 		if (estaVacia()) {
 			throw new ListaVaciaException("La lista está vacía");
 		}
+		
+		//Nodo auxiliar para recorrer la lista
 		Nodo<E> aux = this.inicio;
+		//Nodo anterior que se encontrara antes del nodo auxiliar
 		Nodo<E> ant = null;
 
+		/*
+		 * El nodo auxiliar estara recorriendo la lista siempre y cuando
+		 * no sea un nodo nulo y que su valor sea diferente al token
+		 */
 		while (aux != null && aux.getValor().compareTo(token) != 0) {
 			ant = aux;
 			aux = aux.getSiguiente();
 		}
 
+		//Si el nodo auxiliar paso por todos los elementos de la lista
 		if (aux == null) {
 			throw new TokenNoEncontradoException("No se encontró el token");
 		}
 
+		//Creacion de un nuevo nodo. El elemento sera su valor
 		Nodo<E> nuevo = new Nodo<E>(elemento);
+		
+		//si el nodo auxiliar es el nodo inicial
 		if (ant == null) {
+			//se inserta el nodo nuevo al inicio de la lista
 			nuevo.setSiguiente(this.inicio);
 			this.inicio = nuevo;
 		}
 		else {
+			//El nodo nuevo estara entre el nodo auxiliar y anterior
 			nuevo.setSiguiente(aux);
 			ant.setSiguiente(nuevo);
 		}
@@ -192,20 +262,33 @@ implements Iterable<E> {
 	public void insertarDespuesQueToken(E elemento, E token) 
 			throws TokenNoEncontradoException, ListaVaciaException {
 
+		//Si la lista esta vacia lanza una excepcion
 		if (estaVacia()) {
 			throw new ListaVaciaException("La lista está vacía");
 		}
 
+		//Nodo auxiliar para recorrer la lista
 		Nodo<E> aux = this.inicio;
+		/*
+		 * mientras el nodo auxiliar no sea nulo y su valor sea diferente 
+		 * de token 
+		 */
 		while (aux != null && aux.getValor().compareTo(token) != 0) {
+			//avanza
 			aux = aux.getSiguiente();
 		}
 
+		//si ya recorrio toda la lista lanza una excepcion
 		if (aux == null) {
 			throw new TokenNoEncontradoException("Token no encontrado");
 		}
 
+		//Se crea un nodo nuevo con su valor = elemento
 		Nodo<E> nuevo = new Nodo<E>(elemento);
+		/*
+		 * si el nodo donde se encuentra auxiliar no es el
+		 * ultimo elemento de la lista
+		 */
 		if (aux.getSiguiente() != null) {
 			nuevo.setSiguiente(aux.getSiguiente());
 		}
@@ -220,6 +303,11 @@ implements Iterable<E> {
 	public int size() {
 		int elementos = 0;
 
+		/*
+		 * Nodo auxiliar para recorrer la lista, avanza mientras
+		 * no sea nulo, y cada vez que esto suceda aumentan los 
+		 * elementos una unidad
+		 */
 		Nodo<E> aux = this.inicio;
 		while (aux != null) {
 			elementos++;
@@ -239,25 +327,37 @@ implements Iterable<E> {
 	public void eliminarToken(E token) 
 			throws TokenNoEncontradoException, ListaVaciaException {
 
+		//Si se intenta eliminar un elemento nulo lanza una excepcion
 		if (token == null) {
 			throw new TokenNoEncontradoException("Token nulo");
 		}
-		
+
+		//Si la lista esta vacia lanza una excepcion
 		if (estaVacia()) {
 			throw new ListaVaciaException("La lista está vacía");
 		}
 
+		/*
+		 * Nodo auxiliar para recorrer la lista,
+		 * Nodo anterior que siempre ira detras del auxiliar
+		 */
 		Nodo<E> aux = this.inicio;
 		Nodo<E> ant = null;
+		/*
+		 * Avanzan los nodos aux y ant siempre y cuando aux no sea 
+		 * nulo y su valor sea diferente de token
+		 */
 		while (aux != null && !aux.getValor().equals(token)) {
 			ant = aux;
 			aux = aux.getSiguiente();
 		}
 
+		//si aux ya recorrio toda la lista 
 		if (aux == null) {
 			throw new TokenNoEncontradoException("Token no encontrado");
 		}
 
+		//si aux == inicio
 		if (ant == null) {
 			this.inicio = aux.getSiguiente();
 		}
@@ -279,12 +379,23 @@ implements Iterable<E> {
 		boolean bandera = true;
 		int intentos = 0;
 
+		/*
+		 * Ejecutara el metodo eliminarToken(E token) de esta clase todas
+		 * las veces que sea necesaria hasta que lanze una excepcion.
+		 * 
+		 */
 		do {
 			try {
 				intentos++;
 				eliminarToken(token);
 			} 
 			catch (TokenNoEncontradoException e) {
+				/*
+				 * Si el metodo eliminatToken(E token) lanza una excepcion
+				 * la primera vez que se ejecuta significa que el token 
+				 * nunca exitio en la lista y eso lo damos a conocer 
+				 * lanzando una excepcion con un mensaje.
+				 */
 				if (intentos == 1) {
 					throw new TokenNoEncontradoException("Token no existe en la"
 							+ " lista");
@@ -306,9 +417,17 @@ implements Iterable<E> {
 			throw new ListaVaciaException("La Lista esta vacia");
 		}
 
+		/*
+		 * Nodo auxiliar para recorrer la lista
+		 * Nodo siguiente que se encontrara siguiente al nodo aux
+		 */
 		Nodo<E> aux = this.inicio;
 		Nodo<E> sig = aux.getSiguiente();
 
+		/*
+		 * Avanza los punteros mientras aux no sea nulo y su valor
+		 * sea menor al valor del nodo sig
+		 */
 		while (aux != null && sig != null && aux.compareTo(sig) < 0) {
 			aux = sig;
 			sig = sig.getSiguiente();
@@ -328,13 +447,22 @@ implements Iterable<E> {
 	 * @throws ListaVaciaException se lanza cuando la lista esta vacia.
 	 */
 	public boolean estaOrdenada(boolean menor) throws ListaVaciaException {
+		//Si menor == true significa que ordena la lista de menor a mayor
 		if (menor) {
 			return estaOrdenada();
 		}
-
+		
+		/*
+		 * Nodo auxiliar para recorrer la lista
+		 * Nodo siguiente que se encontrara siguiente al nodo aux
+		 */
 		Nodo<E> aux = this.inicio;
 		Nodo<E> sig = aux.getSiguiente();
 
+		/*
+		 * Avanza los punteros mientras aux no sea nulo y su valor
+		 * sea mayor al valor del nodo sig
+		 */
 		while (aux != null && sig != null && aux.compareTo(sig) > 0) {
 			aux = sig;
 			sig = sig.getSiguiente();
@@ -352,16 +480,21 @@ implements Iterable<E> {
 			throw new ListaVaciaException("La Lista esta vacia");
 		}
 
+		/*
+		 * Nodo auxiliar para recorrer la lista
+		 * Nodo siguiente que se encontrara siguiente al nodo aux
+		 */
 		Nodo<E> aux = this.inicio;
-		Nodo<E> aux2 = null;
+		Nodo<E> sig = null;
 
+		//Metodo burbuja
 		while (aux != null) {
-			aux2 = aux.getSiguiente();
-			while (aux2 != null) {
-				if (aux.compareTo(aux2) > 0) {
-					intercambiar(aux, aux2);
+			sig = aux.getSiguiente();
+			while (sig != null) {
+				if (aux.compareTo(sig) > 0) {
+					intercambiar(aux, sig);
 				}
-				aux2 = aux2.getSiguiente();
+				sig = sig.getSiguiente();
 			}
 			aux = aux.getSiguiente();
 		}
@@ -376,16 +509,21 @@ implements Iterable<E> {
 			throw new ListaVaciaException("La Lista esta vacia");
 		}
 
+		/*
+		 * Nodo auxiliar para recorrer la lista
+		 * Nodo siguiente que se encontrara siguiente al nodo aux
+		 */
 		Nodo<E> aux = this.inicio;
-		Nodo<E> aux2 = null;
+		Nodo<E> sig = null;
 
+		//Metodo burbuja
 		while (aux != null) {
-			aux2 = aux.getSiguiente();
-			while (aux2 != null) {
-				if (aux.compareTo(aux2) < 0) {
-					intercambiar(aux, aux2);
+			sig = aux.getSiguiente();
+			while (sig != null) {
+				if (aux.compareTo(sig) < 0) {
+					intercambiar(aux, sig);
 				}
-				aux2 = aux2.getSiguiente();
+				sig = sig.getSiguiente();
 			}
 			aux = aux.getSiguiente();
 		}
@@ -401,11 +539,17 @@ implements Iterable<E> {
 			return false;
 		}
 
+		/*
+		 * Nodo auxiliar para recorrer la lista
+		 * aux recorre la lista siempre y cuando no sea nulo y su valor
+		 * sea diferente del parametro elemento.
+		 */
 		Nodo<E> aux = this.inicio;
 		while (aux != null && aux.getValor().compareTo(elemento) != 0) {
 			aux = aux.getSiguiente();
 		}
 
+		//si aux no es nulo significa que el nodo con valor = elemento existe
 		return aux != null;
 	}
 
